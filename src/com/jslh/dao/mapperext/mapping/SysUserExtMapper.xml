@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jslh.dao.mapperext.SysUserExtMapper" >
+  <resultMap id="UserOrgRolesResultMap" type="sysUserExt" >
+    <id column="uid" property="id" jdbcType="BIGINT" />
+    <result column="uaccount" property="account" jdbcType="VARCHAR" />
+    <result column="uorg_id" property="orgId" jdbcType="BIGINT" />
+    <result column="upassword" property="password" jdbcType="VARCHAR" />
+    <result column="ubirthday" property="birthday" jdbcType="DATE" />
+    <result column="ucreatetime" property="createtime" jdbcType="TIMESTAMP" />
+    <result column="ugender" property="gender" jdbcType="TINYINT" />
+    <result column="umodifytime" property="modifytime" jdbcType="TIMESTAMP" />
+    <result column="ustatus" property="status" jdbcType="TINYINT" />
+    <association column="uorg_id"  property="org"
+    	javaType="sysOrg" resultMap="OrgResultMap" />
+    <collection column="uid" property="roles" javaType="java.util.ArrayList" 
+    	ofType="sysRole" resultMap="RoleResultMap" />
+  </resultMap>
+  
+  <resultMap id="OrgResultMap" type="sysOrg" >
+    <id column="oid" property="id" jdbcType="BIGINT" />
+    <result column="opath" property="path" jdbcType="VARCHAR" />
+    <result column="oname" property="name" jdbcType="VARCHAR" />
+    <result column="odescription" property="description" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <resultMap id="RoleResultMap" type="sysRole" >
+    <id column="rid" property="id" jdbcType="BIGINT" />
+    <result column="rname" property="name" jdbcType="VARCHAR" />
+    <result column="rdescription" property="description" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <select id="selectUserExt" resultMap="UserOrgRolesResultMap" >
+    select 
+    	u.id as uid, u.account as uaccount, u.org_id as uorg_id, u.password as upassword, 
+    	u.birthday as ubirthday, u.createtime as ucreatetime, u.gender as ugender, 
+    	u.modifytime as umodifytime, u.status as ustatus,
+    	o.id as oid, o.path as opath, o.name as oname, o.description as odescription,
+    	r.id as rid, r.name as rname, r.description as rdescription 
+    from sys_user u 
+    left join sys_org o on u.org_id = o.id 
+    left join sys_user_role ur on u.id = ur.user_id 
+    left join sys_role r on r.id = ur.role_id 
+    <where>
+    	<if test="user.id != null">
+    		u.id = #{user.id}
+    	</if>
+    	<if test="user.account != null">
+    		and u.account = #{user.account}
+    	</if>
+    	<if test="limitStart != null" >
+	      limit #{limitStart}, #{limitEnd}
+	    </if>
+    </where>
+  </select>
+  
+  <select id="countUserExt" resultType="java.lang.Integer" >
+    select count(*) 
+    from sys_user u 
+    <where>
+    	<if test="user.id != null">
+    		u.id = #{user.id}
+    	</if>
+    	<if test="user.account != null">
+    		and u.account = #{user.account}
+    	</if>
+    	<if test="limitStart != null" >
+	      limit #{limitStart}, #{limitEnd}
+	    </if>
+    </where>
+  </select>
+  
+</mapper>

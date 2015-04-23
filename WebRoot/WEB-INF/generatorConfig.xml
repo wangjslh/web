@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE generatorConfiguration PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN" "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd" >
+<generatorConfiguration>
+	<classPathEntry
+		location="D:/workspaces/devspace2/ssm/WebRoot/WEB-INF/lib/mysql-connector-java-5.1.29.jar" />
+	<context id="context1">
+		<plugin type="com.jslh.plugin.MysqlPaginationPlugin" />
+		<jdbcConnection driverClass="com.mysql.jdbc.Driver"
+			connectionURL="jdbc:mysql://localhost/test" userId="root" password="root" />
+		<javaModelGenerator targetPackage="com.jslh.model"
+			targetProject="ssm\src" />
+		<sqlMapGenerator targetPackage="com.jslh.dao.mapper.mapping"
+			targetProject="ssm\src" />
+		<javaClientGenerator targetPackage="com.jslh.dao.mapper"
+			targetProject="ssm\src" type="XMLMAPPER" />
+		<table tableName="sys_user" domainObjectName="SysUser">
+			<generatedKey column="id" sqlStatement="MySql" identity="true" />
+		</table>
+		<table tableName="sys_role" domainObjectName="SysRole">
+			<generatedKey column="id" sqlStatement="MySql" identity="true" />
+		</table>
+		<table tableName="sys_user_role" domainObjectName="SysUserRole" />
+		<table tableName="sys_org" domainObjectName="SysOrg">
+			<generatedKey column="id" sqlStatement="MySql" identity="true" />
+		</table>
+		<table tableName="sys_area" domainObjectName="SysArea">
+			<generatedKey column="code" sqlStatement="MySql" identity="true" />
+		</table>
+		
+	</context>
+</generatorConfiguration>
